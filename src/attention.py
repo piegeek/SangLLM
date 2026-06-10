@@ -75,6 +75,9 @@ class MultiHeadAttention(nn.Module):
 
 		self.proj = nn.Linear(d_model, d_model)
 
+		# Transformers almost always use dropout.
+		self.dropout = nn.Dropout(0.2)
+
 	def forward(self, x):
 		out = torch.cat(
 			[h(x) for h in self.heads],
@@ -82,6 +85,9 @@ class MultiHeadAttention(nn.Module):
 		)
 
 		out = self.proj(out)
+		
+		# Transformers almost always use dropout.
+		out = self.dropout(out)
 
 		return out
 

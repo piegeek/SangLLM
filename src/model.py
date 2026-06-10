@@ -102,8 +102,15 @@ class FeedForward(nn.Module):
 			nn.Linear(4 * d_model, d_model)
 		)
 
+		self.dropout = nn.Dropout(0.2)
+
 	def forward(self, x):
-		return self.net(x)
+		out = self.net(x)
+		
+		# Transformers almost always use dropout.
+		out = self.dropout(out)
+	
+		return out
 
 class TransformerBlock(nn.Module):
 	def __init__(self, d_model, attention_module):
