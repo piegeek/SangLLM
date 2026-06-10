@@ -35,7 +35,7 @@ logits = model(x)
 (B, T) -> (B, T, d_model) -> (B, T, vocab_size)
 
 Q. 
-What does FeedForward do in terms of the overall architecture?
+What does FeedForward(MLP) do in terms of the overall architecture?
 
 A. 
 its job is to refine whatever the attention block gathered. (GELU)
