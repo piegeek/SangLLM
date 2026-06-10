@@ -7,9 +7,29 @@ Basically, to start up, we need the following objects:
 
 2. loader
 - Loads (input, output) pairs for training
+- Each input & output has dimensions (B x T)
 
 3. model
 - Holds embedding matrix
 
 4. optimizer
 - Used for backpropagation
+
+Batch size vs Sequence length
+
+Sequence length: window size
+Batch size: How many training examples we process simultaneously -> Affects training efficiency
+
+Q. What's the difference between attention.Head.forward() and model.AttentionLM.forward()
+
+A. 
+The AttentionLM.forward() is the entire model's forward pass.
+The Head.forward() is just one layer inside the model.
+
+x: (B, T, d_model) -> (B, T, head_size)
+idx: (B, T) -> (B, T, vocab_size)
+
+When calling
+logits = model(x)
+
+(B, T) -> (B, T, d_model) -> (B, T, vocab_size)

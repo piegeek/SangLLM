@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from src.dataset import CharDataset
-from src.model import TinyLM
+from src.model import TinyLM, AttentionLM
 
 with open('data/data.txt', 'r') as f:
 	text = f.read()
@@ -17,7 +17,8 @@ loader = DataLoader(
 )
 
 # Model has 64 features
-model = TinyLM(dataset.vocab_size, d_model=64)
+# model = TinyLM(dataset.vocab_size, d_model=64)
+model = AttentionLM(dataset.vocab_size, d_model=64)
 vocab_size = dataset.vocab_size
 
 optimizer = torch.optim.Adam(
