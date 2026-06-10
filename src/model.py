@@ -42,11 +42,16 @@ class BigramLM(nn.Module):
 		return logits
 
 class AttentionLM(nn.Module):
-	def __init__(self, vocab_size, d_model):
+	def __init__(self, vocab_size, d_model, context_length=8):
 		super().__init__()
 
-		self.embedding = nn.Embedding(
+		self.token_embedding = nn.Embedding(
 			vocab_size,
+			d_model
+		)
+
+		self.position_embedding = nn.Embedding(
+			context_length,
 			d_model
 		)
 
@@ -61,7 +66,18 @@ class AttentionLM(nn.Module):
 		)
 
 	def forward(self, idx):
-		x = self.embedding(idx)
+		B, T = idx.shape
+
+		tok_emb = self.token_embedding(idx)
+
+		positions = torch.arange(
+			T,
+			device=idx.device
+		)
+
+		pos_emb = self.position_embedding(positions)
+
+		x = tok_emb + pos_emb
 
 		x = self.attention(x)
 
