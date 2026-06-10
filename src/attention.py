@@ -62,6 +62,29 @@ class Head(nn.Module):
 
 		return out
 
+class MultiHeadAttention(nn.Module):
+	def __init__(self, d_model, num_heads):
+		super().__init__()
+
+		# When num_heads = 1 (Single Head), head_size = d_model
+		head_size = d_model // num_heads
+
+		self.heads = nn.ModuleList(
+			[Head(d_model, head_size) for _ in range(num_heads)]
+		)
+
+		self.proj = nn.Linear(d_model, d_model)
+
+	def forward(self, x):
+		out = torch.cat(
+			[h(x) for h in self.heads],
+			dim=-1
+		)
+
+		out = self.proj(out)
+
+		return out
+
 if __name__ == '__main__':
 	head = Head(
 		d_model=64,

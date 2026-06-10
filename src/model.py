@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from src.attention import Head
+from src.attention import Head, MultiHeadAttention
 
 class TinyLM(nn.Module):
 	def __init__(self, vocab_size, d_model):
@@ -48,9 +48,16 @@ class AttentionLM(nn.Module):
 		self.token_embedding = nn.Embedding(vocab_size, d_model)
 		self.position_embedding = nn.Embedding(context_length, d_model)
 
-		self.attention = Head(
+		# Single-headed attention
+		# self.attention = Head(
+		# 	d_model=d_model,
+		# 	head_size=d_model
+		# )
+
+		# Multi-headed attention
+		self.attention = MultiHeadAttention(
 			d_model=d_model,
-			head_size=d_model
+			num_heads=4
 		)
 
 		# Blocks

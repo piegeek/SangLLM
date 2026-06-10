@@ -18,7 +18,7 @@ loader = DataLoader(
 
 # Model has 64 features
 # model = TinyLM(dataset.vocab_size, d_model=64)
-model = AttentionLM(vocab_size=dataset.vocab_size, d_model=64)
+model = AttentionLM(vocab_size=dataset.vocab_size, d_model=64, n_layers=4)
 vocab_size = dataset.vocab_size
 
 optimizer = torch.optim.Adam(
