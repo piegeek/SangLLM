@@ -26,10 +26,16 @@ A.
 The AttentionLM.forward() is the entire model's forward pass.
 The Head.forward() is just one layer inside the model.
 
-x: (B, T, d_model) -> (B, T, head_size)
-idx: (B, T) -> (B, T, vocab_size)
+x: (B, T, d_model) -> (B, T, head_size) (Head)
+idx: (B, T) -> (B, T, vocab_size) (AttentionLM)
 
 When calling
 logits = model(x)
 
 (B, T) -> (B, T, d_model) -> (B, T, vocab_size)
+
+Q. 
+What does FeedForward do in terms of the overall architecture?
+
+A. 
+its job is to refine whatever the attention block gathered. (GELU)

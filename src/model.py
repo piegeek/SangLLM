@@ -85,6 +85,19 @@ class AttentionLM(nn.Module):
 
 		return logits
 
+class FeedForward(nn.Module):
+	def __init__(self, d_model):
+		super().__init__()
+
+		self.net = nn.Sequential(
+			nn.Linear(d_model, 4 * d_model),
+			nn.GELU(),
+			nn.Linear(4 * d_model, d_model)
+		)
+
+	def forward(self, x):
+		return self.net(x)
+
 if __name__ == '__main__':
 	model = AttentionLM(17, 64)
 
