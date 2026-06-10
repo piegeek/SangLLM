@@ -26,7 +26,7 @@ A.
 The AttentionLM.forward() is the entire model's forward pass.
 The Head.forward() is just one layer inside the model.
 
-x: (B, T, d_model) -> (B, T, head_size) (Head)
+x: (B, T, d_model) -> (B, T, head_size) (Head); (B, T, C) -> (B, T, C) if d_model=C and head_size=C in our code
 idx: (B, T) -> (B, T, vocab_size) (AttentionLM)
 
 When calling
@@ -39,3 +39,5 @@ What does FeedForward(MLP) do in terms of the overall architecture?
 
 A. 
 its job is to refine whatever the attention block gathered. (GELU)
+Also, without FFN, tokens only mix information, with FFN, tokens mix + compute new features
+

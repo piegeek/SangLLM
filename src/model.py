@@ -42,23 +42,24 @@ class BigramLM(nn.Module):
 		return logits
 
 class AttentionLM(nn.Module):
-	def __init__(self, vocab_size, d_model, context_length=8):
+	def __init__(self, vocab_size, d_model, context_length=8, n_layers=2):
 		super().__init__()
 
-		self.token_embedding = nn.Embedding(
-			vocab_size,
-			d_model
-		)
-
-		self.position_embedding = nn.Embedding(
-			context_length,
-			d_model
-		)
+		self.token_embedding = nn.Embedding(vocab_size, d_model)
+		self.position_embedding = nn.Embedding(context_length, d_model)
 
 		self.attention = Head(
 			d_model=d_model,
 			head_size=d_model
 		)
+
+		# Blocks
+		self.blocks = nn.Sequential(
+			*[TransformerBlock(d_model, self.attention) for _ in range(n_layers)]
+		)
+
+		# Final layer LayerNorm
+		self.ln_f = nn.LayerNorm(d_model)
 
 		self.lm_head = nn.Linear(
 			d_model,
@@ -70,16 +71,15 @@ class AttentionLM(nn.Module):
 
 		tok_emb = self.token_embedding(idx)
 
-		positions = torch.arange(
-			T,
-			device=idx.device
+		pos_emb = self.position_embedding(
+			torch.arange(T, device=idx.device)
 		)
-
-		pos_emb = self.position_embedding(positions)
 
 		x = tok_emb + pos_emb
 
-		x = self.attention(x)
+		x = self.blocks(x)
+
+		x = self.ln_f(x)
 
 		logits = self.lm_head(x)
 
