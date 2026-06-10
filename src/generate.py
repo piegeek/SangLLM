@@ -23,9 +23,12 @@ model.load_state_dict(
 model.eval()
 
 @torch.no_grad()
-def generate(model, idx, max_new_tokens, temperature):
+def generate(model, idx, max_new_tokens, temperature, context_length):
 	for _ in range(max_new_tokens):
-		logits = model.forward(idx)
+		# Contextual Cropping
+		idx_cond = idx[:, -context_length:]
+
+		logits = model(idx_cond)
 
 		logits = logits[:, -1, :]
 
@@ -54,7 +57,8 @@ tokens = generate(
 	model,
 	start,
 	max_new_tokens=1,
-	temperature=0.8
+	temperature=0.8,
+	context_length=8
 )
 
 decoded = ''.join(
