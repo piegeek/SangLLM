@@ -2,7 +2,7 @@ import os
 import torch
 
 from src.dataset import CharDataset
-from src.model import TinyLM
+from src.model import TinyLM, AttentionLM
 
 with open('data/data.txt', 'r') as f:
 	text = f.read()
@@ -10,9 +10,10 @@ with open('data/data.txt', 'r') as f:
 dataset = CharDataset(text)
 vocab_size = dataset.vocab_size
 
-model = TinyLM(
+model = AttentionLM(
 	vocab_size=vocab_size,
-	d_model=64
+	d_model=64,
+	n_layers=4
 )
 
 model.load_state_dict(
@@ -22,11 +23,14 @@ model.load_state_dict(
 model.eval()
 
 @torch.no_grad()
-def generate(model, idx, max_new_tokens):
+def generate(model, idx, max_new_tokens, temperature):
 	for _ in range(max_new_tokens):
 		logits = model.forward(idx)
 
 		logits = logits[:, -1, :]
+
+		# Add temperature
+		logits = logits / temperature
 
 		probs = torch.softmax(logits, dim=-1)
 
@@ -49,7 +53,8 @@ start = torch.tensor([
 tokens = generate(
 	model,
 	start,
-	max_new_tokens=1
+	max_new_tokens=1,
+	temperature=0.8
 )
 
 decoded = ''.join(
