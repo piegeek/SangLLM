@@ -1,0 +1,15 @@
+[6/10/26]
+
+Basically, to start up, we need the following objects:
+
+1. dataset
+- Holds tokenIDs, vocab_size, context_length(window size)
+
+2. loader
+- Loads (input, output) pairs for training
+
+3. model
+- Holds embedding matrix
+
+4. optimizer
+- Used for backpropagation

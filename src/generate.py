@@ -49,7 +49,7 @@ start = torch.tensor([
 tokens = generate(
 	model,
 	start,
-	max_new_tokens=50
+	max_new_tokens=1
 )
 
 decoded = ''.join(

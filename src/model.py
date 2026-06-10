@@ -22,3 +22,18 @@ class TinyLM(nn.Module):
 		logits = self.head(x)
 
 		return logits
+
+class BigramLM(nn.Module):
+	def __init__(self, vocab_size):
+		super().__init__()
+
+		# Current x Next
+		self.table = nn.Embedding(
+			vocab_size,
+			vocab_size
+		)
+
+	def forward(self, idx):
+		logits = self.table(idx)
+
+		return logits
