@@ -11,11 +11,11 @@ vocab_size = tokenizer.vocab_size
 
 # Hyperparameters
 context_length = 64
-batch_size = 32
+batch_size = 32 # 16 for checkpoint2.pt
 d_model = 64
 learning_rate = 3e-4
-n_heads = 1
-n_layers = 1
+n_heads = 1 # 2 for checkpoint2.pt
+n_layers = 1 # 2 for checkpoint2.pt
 epochs = 10
 
 model = AttentionLM(
@@ -27,7 +27,7 @@ model = AttentionLM(
 )
 
 model.load_state_dict(
-	torch.load('checkpoint.pt')
+	torch.load('checkpoints/checkpoint1.pt')
 )
 
 model.eval()

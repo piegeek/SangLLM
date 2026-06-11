@@ -9,11 +9,11 @@ from src.model import AttentionLM
 
 # Hyperparameters
 context_length = 64
-batch_size = 32
+batch_size = 16
 d_model = 64
 learning_rate = 3e-4
-n_heads = 1
-n_layers = 1
+n_heads = 2
+n_layers = 2
 epochs = 10
 
 # Tokenizer

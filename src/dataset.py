@@ -41,6 +41,9 @@ class TextDataset(Dataset):
 
 		text = open(path).read()
 
+		text = text.replace('\n', ' ')
+		text = ' '.join(text.split())
+
 		self.tokens = torch.tensor(
 			tokenizer.encode(text),
 			dtype=torch.long
