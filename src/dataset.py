@@ -2,6 +2,8 @@ import os
 import torch
 from torch.utils.data import Dataset
 
+from src.tokenizer import GPTTokenizer
+
 class CharDataset(Dataset):
 	def __init__(self, text, context_length=8):
 		chars = sorted(list(set(text)))
@@ -29,24 +31,56 @@ class CharDataset(Dataset):
 
 		return x, y
 
+class TextDataset(Dataset):
+	def __init__(self, path, context_length):
+		tokenizer = GPTTokenizer()
+
+		text = open(path).read()
+
+		self.tokens = torch.tensor(
+			tokenizer.encode(text),
+			dtype=torch.long
+		)
+
+		self.context_length = context_length
+		self.vocab_size = tokenizer.vocab_size
+
+	def __len__(self):
+		return len(self.tokens) - self.context_length
+
+	def __getitem__(self, idx):
+		x = self.tokens[idx:idx+self.context_length]
+		y = self.tokens[idx+1:idx+self.context_length+1]
+
+		return x, y
+
 if __name__ == '__main__':
 	current_dir = os.path.dirname(os.path.abspath(__file__))
 
 	file_path = os.path.join(current_dir, '..', 'data', 'data.txt')
 
-	text = []
-	with open(file_path, 'r') as file:
-		while True:
-			content = file.readline()
+	# For TextDataset
+	dataset = TextDataset(file_path, context_length=8)
 
-			if not content:
-				break
+	x, y = dataset[0]
 
-			text.append(content)
+	print(x)
+	print(y)
 
-	for t in text:
-		dataset = CharDataset(t)
-		x, y = dataset[0]
+	# For CharDataset
+	# text = []
+	# with open(file_path, 'r') as file:
+	# 	while True:
+	# 		content = file.readline()
 
-		print(x)
-		print(y)
+	# 		if not content:
+	# 			break
+
+	# 		text.append(content)
+
+	# for t in text:
+	# 	dataset = CharDataset(t)
+	# 	x, y = dataset[0]
+
+	# 	print(x)
+	# 	print(y)

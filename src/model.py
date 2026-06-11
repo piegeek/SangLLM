@@ -42,7 +42,7 @@ class BigramLM(nn.Module):
 		return logits
 
 class AttentionLM(nn.Module):
-	def __init__(self, vocab_size, d_model, context_length=8, n_layers=2):
+	def __init__(self, vocab_size, d_model, context_length=8, num_heads=4, n_layers=2):
 		super().__init__()
 
 		self.token_embedding = nn.Embedding(vocab_size, d_model)
@@ -57,7 +57,7 @@ class AttentionLM(nn.Module):
 		# Multi-headed attention
 		self.attention = MultiHeadAttention(
 			d_model=d_model,
-			num_heads=4
+			num_heads=num_heads
 		)
 
 		# Blocks
@@ -68,6 +68,7 @@ class AttentionLM(nn.Module):
 		# Final layer LayerNorm
 		self.ln_f = nn.LayerNorm(d_model)
 
+		# (B, T, d_model) -> (B, T, vocab_size) [seq]
 		self.lm_head = nn.Linear(
 			d_model,
 			vocab_size
