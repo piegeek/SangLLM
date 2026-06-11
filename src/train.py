@@ -14,7 +14,7 @@ d_model = 64
 learning_rate = 3e-4
 n_heads = 2
 n_layers = 2
-epochs = 10
+epochs = 30
 
 # Tokenizer
 # For full GPT params support
@@ -25,7 +25,7 @@ tokenizer = BPETokenizer()
 
 # Dataset
 dataset = TextDataset(
-	'data/data.txt',
+	'data/data2.txt',
 	context_length
 )
 
@@ -78,7 +78,7 @@ for i in range(epochs):
 # Save checkpoint
 torch.save(
 	model.state_dict(),
-	'checkpoint.pt'
+	'checkpoints/checkpoint_temp_data2.pt'
 )
 
 # Simple token strategy training code

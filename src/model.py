@@ -54,15 +54,9 @@ class AttentionLM(nn.Module):
 		# 	head_size=d_model
 		# )
 
-		# Multi-headed attention
-		self.attention = MultiHeadAttention(
-			d_model=d_model,
-			num_heads=num_heads
-		)
-
 		# Blocks
 		self.blocks = nn.Sequential(
-			*[TransformerBlock(d_model, self.attention) for _ in range(n_layers)]
+			*[TransformerBlock(d_model, num_heads) for _ in range(n_layers)]
 		)
 
 		# Final layer LayerNorm
@@ -94,10 +88,11 @@ class AttentionLM(nn.Module):
 		return logits
 
 class TransformerBlock(nn.Module):
-	def __init__(self, d_model, attention_module):
+	def __init__(self, d_model, num_heads):
 		super().__init__()
 
-		self.attn = attention_module
+		# Multi-headed attention and separate attention for each block
+		self.attn = MultiHeadAttention(d_model=d_model, num_heads=num_heads)
 		self.ffn = FeedForward(d_model)
 
 		self.ln1 = nn.LayerNorm(d_model)

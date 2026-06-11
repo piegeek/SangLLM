@@ -31,7 +31,8 @@ model = AttentionLM(
 
 model.load_state_dict(
 	# torch.load('checkpoints/checkpoint1.pt')
-	torch.load('checkpoints/checkpoint2.pt')
+	# torch.load('checkpoints/checkpoint2.pt')
+	torch.load('checkpoints/checkpoint_temp_data2.pt')
 )
 
 model.eval()
@@ -63,7 +64,7 @@ def generate(model, idx, max_new_tokens, temperature, context_length):
 
 	return idx
 
-prompt = 'hello world'
+prompt = 'hello'
 # prompt = 'Hi my name is Sang Yeop'
 
 start_tokens = tokenizer.encode(prompt)
@@ -77,7 +78,7 @@ tokens = generate(
 	model,
 	start,
 	max_new_tokens=50,
-	temperature=0.8,
+	temperature=0.3,
 	context_length=context_length
 )
 
