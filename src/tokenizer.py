@@ -1,4 +1,5 @@
 import tiktoken
+from tokenizers import Tokenizer
 
 class GPTTokenizer:
 	def __init__(self):
@@ -15,6 +16,20 @@ class GPTTokenizer:
 
 	def decode(self, tokens):
 		return self.enc.decode(tokens)
+
+class BPETokenizer:
+	def __init__(self,path='tokenizer.json'):
+		self.tokenizer = Tokenizer.from_file(path)
+
+	@property
+	def vocab_size(self):
+		return self.tokenizer.get_vocab_size()
+
+	def encode(self, text):
+		return self.tokenizer.encode(text).ids
+
+	def decode(self, ids):
+		return self.tokenizer.decode(ids)
 
 if __name__ == '__main__':
 	tok = GPTTokenizer()

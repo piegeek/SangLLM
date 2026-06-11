@@ -93,6 +93,25 @@ class AttentionLM(nn.Module):
 
 		return logits
 
+class TransformerBlock(nn.Module):
+	def __init__(self, d_model, attention_module):
+		super().__init__()
+
+		self.attn = attention_module
+		self.ffn = FeedForward(d_model)
+
+		self.ln1 = nn.LayerNorm(d_model)
+		self.ln2 = nn.LayerNorm(d_model)
+
+	def forward(self, x):
+		# Attention sublayer
+		x = x + self.attn(self.ln1(x))
+
+		# Feedforward sublayer
+		x = x + self.ffn(self.ln2(x))
+
+		return x
+
 class FeedForward(nn.Module):
 	def __init__(self, d_model):
 		super().__init__()
@@ -113,24 +132,6 @@ class FeedForward(nn.Module):
 	
 		return out
 
-class TransformerBlock(nn.Module):
-	def __init__(self, d_model, attention_module):
-		super().__init__()
-
-		self.attn = attention_module
-		self.ffn = FeedForward(d_model)
-
-		self.ln1 = nn.LayerNorm(d_model)
-		self.ln2 = nn.LayerNorm(d_model)
-
-	def forward(self, x):
-		# Attention sublayer
-		x = x + self.attn(self.ln1(x))
-
-		# Feedforward sublayer
-		x = x + self.ffn(self.ln2(x))
-
-		return x
 
 if __name__ == '__main__':
 	model = AttentionLM(17, 64)

@@ -41,3 +41,12 @@ A.
 its job is to refine whatever the attention block gathered. (GELU)
 Also, without FFN, tokens only mix information, with FFN, tokens mix + compute new features
 
+[6/11/26]
+
+1. dataset.py -> Generates the dataset that is to be loaded into loader
+2. model.py -> Defines the total LLM model. Feeds input embeddings (tok_emb + pos_emb, (B, T, d_model)) into the Transformer blocks and generates a logit (B, T, vocab_size) output
+3. attention.py -> Defines SingleHeadAttention, MultiHeadAttention. Maps (B, T, d_model) into (B, T, head_size), then when we get the output, we project it back to (B, T, d_model)
+4. tokenizer.py -> Defines various tokenization schemes
+5. train.py -> 1. Set tokenizer, create dataset, load from dataset to get idx (B, T)
+			   2. Set model, optimizer, then go through indices and check loss and backpropagagte
+			   3. Once training is finished, store the model in *.pt file

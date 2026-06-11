@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
 from src.dataset import TextDataset
-from src.tokenizer import GPTTokenizer
+from src.tokenizer import GPTTokenizer, BPETokenizer
 from src.model import AttentionLM
 
 # Hyperparameters
@@ -17,7 +17,11 @@ n_layers = 1
 epochs = 10
 
 # Tokenizer
-tokenizer = GPTTokenizer()
+# For full GPT params support
+# tokenizer = GPTTokenizer()
+
+# For smaller vocab_size support
+tokenizer = BPETokenizer()
 
 # Dataset
 dataset = TextDataset(

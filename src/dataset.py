@@ -2,7 +2,7 @@ import os
 import torch
 from torch.utils.data import Dataset
 
-from src.tokenizer import GPTTokenizer
+from src.tokenizer import GPTTokenizer, BPETokenizer
 
 class CharDataset(Dataset):
 	def __init__(self, text, context_length=8):
@@ -33,7 +33,11 @@ class CharDataset(Dataset):
 
 class TextDataset(Dataset):
 	def __init__(self, path, context_length):
-		tokenizer = GPTTokenizer()
+		# For GPT configs - large vocab_size
+		# tokenizer = GPTTokenizer()
+
+		# For smaller vocab_size
+		tokenizer = BPETokenizer()
 
 		text = open(path).read()
 
