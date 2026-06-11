@@ -50,3 +50,12 @@ Also, without FFN, tokens only mix information, with FFN, tokens mix + compute n
 5. train.py -> 1. Set tokenizer, create dataset, load from dataset to get idx (B, T)
 			   2. Set model, optimizer, then go through indices and check loss and backpropagagte
 			   3. Once training is finished, store the model in *.pt file
+
+index(idx) is [B][T] -> points to a 1 x dim vector
+
+Q.
+What does nn.Embedding() do?
+
+A.
+nn.Embedding: (B, T) -> (B, T, d_model)
+nn.Linear: (B, T, d_model) -> (B, T, vocab_size)
