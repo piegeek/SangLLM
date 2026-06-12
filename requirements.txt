@@ -1,0 +1,6 @@
+torch
+transformers
+datasets
+tokenizers
+tiktoken
+numpy<2
