@@ -11,9 +11,20 @@ inputs = tokenizer(
 	return_tensors='pt'
 )
 
+# Greedy decoding
+# output = model.generate(
+# 	**inputs,
+# 	max_new_tokens=50
+# )
+
+# With Sampling 
 output = model.generate(
 	**inputs,
-	max_new_tokens=50
+	max_new_tokens=50,
+	do_sample=True,
+	temperature=0.8,
+	top_k=50,
+	# top_p=0.95
 )
 
 output_text = tokenizer.decode(
