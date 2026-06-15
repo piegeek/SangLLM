@@ -48,12 +48,6 @@ class AttentionLM(nn.Module):
 		self.token_embedding = nn.Embedding(vocab_size, d_model)
 		self.position_embedding = nn.Embedding(context_length, d_model)
 
-		# Single-headed attention
-		# self.attention = Head(
-		# 	d_model=d_model,
-		# 	head_size=d_model
-		# )
-
 		# Blocks
 		self.blocks = nn.Sequential(
 			*[TransformerBlock(d_model, num_heads) for _ in range(n_layers)]
