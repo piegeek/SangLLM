@@ -16,13 +16,6 @@ n_heads = 2
 n_layers = 2
 epochs = 30
 
-# Tokenizer
-# For full GPT params support
-# tokenizer = GPTTokenizer()
-
-# For smaller vocab_size support
-tokenizer = BPETokenizer()
-
 # Dataset
 dataset = TextDataset(
 	'data/data2.txt',
@@ -35,15 +28,19 @@ loader = DataLoader(
 	shuffle=True
 )
 
-print('Dataset size:', len(dataset))
-print('Num batches:', len(loader))
-print(tokenizer.vocab_size)
 
-# Model
+# Tokenizer
+# For full GPT params support
+# tokenizer = GPTTokenizer()
+
+# For smaller vocab_size support
+tokenizer = BPETokenizer()
+
+# Model Define (B, T, C(either vocab_size or d_model)), n_heads, n_layers
 model = AttentionLM(
 	vocab_size=tokenizer.vocab_size,
 	d_model=d_model,
-	context_length=context_length,
+	context_length=context_length, 
 	num_heads=n_heads,
 	n_layers=n_layers
 )
