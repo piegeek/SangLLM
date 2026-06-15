@@ -87,6 +87,7 @@ class AttentionLM(nn.Module):
 
 		return logits
 
+# ln1 -> Attention -> ln2 -> Feedforward
 class TransformerBlock(nn.Module):
 	def __init__(self, d_model, num_heads):
 		super().__init__()
@@ -107,6 +108,7 @@ class TransformerBlock(nn.Module):
 
 		return x
 
+# GELU
 class FeedForward(nn.Module):
 	def __init__(self, d_model):
 		super().__init__()
