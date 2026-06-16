@@ -19,17 +19,12 @@ n_heads = 6
 n_layers = 6
 epochs = 10
 
-# Dataset
-dataset = TextDataset(
-	'data/data.txt',
-	context_length
-)
+# Datasets
+train_ds = TextDataset('data/data.txt', context_length, split='train')
+val_ds = TextDataset('data/data.txt', context_length, split='val')
 
-loader = DataLoader(
-	dataset,
-	batch_size=batch_size,
-	shuffle=True
-)
+train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
 
 # Tokenizer
 # For full GPT params support
@@ -54,9 +49,25 @@ optimizer = torch.optim.AdamW(
 	lr=learning_rate
 )
 
+# Evaluate val_dataset
+@torch.no_grad()
+def evaluate(max_batches=20):
+	model.eval()
+	losses = []
+	for step, (x, y) in enumerate(val_loader):
+		if step >= max_batches:
+			break
+		x, y = x.to(device), y.to(device)
+		logits = model(x)
+		B, T, C = logits.shape
+		loss = F.cross_entropy(logits.view(B*T, C), y.view(B*T))
+		losses.append(loss.item())
+	model.train()
+	return sum(losses) / len(losses)
+
 # Training Loop
 for i in range(epochs):
-	for step, (x, y) in enumerate(loader):
+	for step, (x, y) in enumerate(train_loader):
 
 		x, y = x.to(device), y.to(device)
 
@@ -76,7 +87,8 @@ for i in range(epochs):
 		optimizer.step()
 
 		if step % 100 == 0:
-			print(f'epoch={i} step={step} loss={loss.item():.4f}')
+			val_loss = evaluate()
+			print(f'epoch={i} step={step} train_loss={loss.item():.4f}, val_loss={val_loss:.4f}')
 
 # Save checkpoint
 torch.save(

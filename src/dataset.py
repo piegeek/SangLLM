@@ -32,7 +32,7 @@ class CharDataset(Dataset):
 		return x, y
 
 class TextDataset(Dataset):
-	def __init__(self, path, context_length):
+	def __init__(self, path, context_length, split='train', split_ratio=0.9):
 		# For GPT configs - large vocab_size
 		# tokenizer = GPTTokenizer()
 
@@ -48,6 +48,10 @@ class TextDataset(Dataset):
 			tokenizer.encode(text),
 			dtype=torch.long
 		)
+
+		# Contiguous split so train/val windows never overlap
+		n = int(split_ratio * len(self.tokens))
+		self.tokens = self.tokens[:n] if split == 'train' else self.tokens[n:]
 
 		self.context_length = context_length
 		self.vocab_size = tokenizer.vocab_size
