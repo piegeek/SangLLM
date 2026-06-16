@@ -7,18 +7,21 @@ from src.dataset import TextDataset
 from src.tokenizer import GPTTokenizer, BPETokenizer
 from src.model import AttentionLM
 
+# Device
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 # Hyperparameters
 context_length = 64
-batch_size = 16
+batch_size = 32
 d_model = 64
 learning_rate = 3e-4
-n_heads = 2
-n_layers = 2
-epochs = 30
+n_heads = 4
+n_layers = 4
+epochs = 10
 
 # Dataset
 dataset = TextDataset(
-	'data/data2.txt',
+	'data/data.txt',
 	context_length
 )
 
@@ -45,6 +48,8 @@ model = AttentionLM(
 	n_layers=n_layers
 )
 
+model = model.to(device)
+
 optimizer = torch.optim.AdamW(
 	model.parameters(),
 	lr=learning_rate
@@ -53,7 +58,9 @@ optimizer = torch.optim.AdamW(
 # Training Loop
 for i in range(epochs):
 	for step, (x, y) in enumerate(loader):
-		
+
+		x, y = x.to(device), y.to(device)
+
 		logits = model(x)
 
 		B, T, C = logits.shape
@@ -75,7 +82,7 @@ for i in range(epochs):
 # Save checkpoint
 torch.save(
 	model.state_dict(),
-	'checkpoints/checkpoint_temp_data2.pt'
+	'checkpoints/checkpoint3.pt'
 )
 
 # Simple token strategy training code

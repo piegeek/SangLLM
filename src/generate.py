@@ -10,15 +10,23 @@ tokenizer = BPETokenizer()
 vocab_size = tokenizer.vocab_size
 
 # Hyperparameters
+# context_length = 64
+# # batch_size = 32 # 16 for checkpoint2.pt
+# batch_size = 16# 16 for checkpoint2.pt
+# d_model = 64
+# learning_rate = 3e-4
+# # n_heads = 1 # 2 for checkpoint2.pt
+# # n_layers = 1 # 2 for checkpoint2.pt
+# n_heads = 2 # 2 for checkpoint2.pt
+# n_layers = 2 # 2 for checkpoint2.pt
+# epochs = 10
+
 context_length = 64
-# batch_size = 32 # 16 for checkpoint2.pt
-batch_size = 16# 16 for checkpoint2.pt
+batch_size = 32
 d_model = 64
 learning_rate = 3e-4
-# n_heads = 1 # 2 for checkpoint2.pt
-# n_layers = 1 # 2 for checkpoint2.pt
-n_heads = 2 # 2 for checkpoint2.pt
-n_layers = 2 # 2 for checkpoint2.pt
+n_heads = 4
+n_layers = 4
 epochs = 10
 
 model = AttentionLM(
@@ -32,7 +40,8 @@ model = AttentionLM(
 model.load_state_dict(
 	# torch.load('checkpoints/checkpoint1.pt')
 	# torch.load('checkpoints/checkpoint2.pt')
-	torch.load('checkpoints/checkpoint_temp_data2.pt')
+	# torch.load('checkpoints/checkpoint_temp_data2.pt')
+	# torch.load('checkpoints/checkpoint3.pt')
 )
 
 model.eval()
@@ -64,8 +73,8 @@ def generate(model, idx, max_new_tokens, temperature, context_length):
 
 	return idx
 
-prompt = 'hello'
-# prompt = 'Hi my name is Sang Yeop'
+# prompt = 'hello'
+prompt = 'Hi my name is Sang Yeop'
 
 start_tokens = tokenizer.encode(prompt)
 
