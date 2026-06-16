@@ -2,7 +2,9 @@
 venv/*
 
 # pycache
+__pycache__
 */__pycache__/*
+__pycache__/*
 
 # gpt2_sentiment
 */gpt2_sentiment/*
@@ -10,3 +12,9 @@ gpt2_sentiment/*
 
 # .pt files
 *.pt
+
+# data
+data/*
+
+# Train log
+train.log

@@ -1,5 +1,6 @@
 import os
 import torch
+import numpy as np
 from torch.utils.data import Dataset
 
 from src.tokenizer import GPTTokenizer, BPETokenizer
@@ -62,6 +63,21 @@ class TextDataset(Dataset):
 	def __getitem__(self, idx):
 		x = self.tokens[idx:idx+self.context_length]
 		y = self.tokens[idx+1:idx+self.context_length+1]
+
+		return x, y
+
+class BinDataset(Dataset):
+	def __init__(self, path, context_length):
+		self.data = np.memmap(path, dtype=np.uint16, mode='r')
+		self.context_length = context_length
+
+	def __len__(self):
+		return len(self.data) - self.context_length
+
+	def __getitem__(self, idx):
+		c = self.context_length
+		x = torch.from_numpy(self.data[idx:idx+c].astype(np.int64))
+		y = torch.from_numpy(self.data[idx+1:idx+c+1].astype(np.int64))
 
 		return x, y
 

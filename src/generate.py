@@ -31,7 +31,8 @@ model.load_state_dict(
 	# torch.load('checkpoints/checkpoint2.pt')
 	# torch.load('checkpoints/checkpoint_temp_data2.pt')
 	# torch.load('checkpoints/checkpoint3.pt')
-	torch.load('checkpoints/checkpoint4.pt')
+	# torch.load('checkpoints/checkpoint4.pt')
+	torch.load('checkpoints/checkpoint5.pt')
 )
 
 model.eval()

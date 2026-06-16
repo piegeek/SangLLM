@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
-from src.dataset import TextDataset
+from src.dataset import TextDataset, BinDataset
 from src.tokenizer import GPTTokenizer, BPETokenizer
 from src.model import AttentionLM
 
@@ -20,8 +20,11 @@ n_layers = 6
 epochs = 10
 
 # Datasets
-train_ds = TextDataset('data/data.txt', context_length, split='train')
-val_ds = TextDataset('data/data.txt', context_length, split='val')
+# train_ds = TextDataset('data/data.txt', context_length, split='train')
+# val_ds = TextDataset('data/data.txt', context_length, split='val')
+
+train_ds = BinDataset('data/train.bin', context_length)
+val_ds = BinDataset('data/val.bin', context_length)
 
 train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
@@ -93,7 +96,7 @@ for i in range(epochs):
 # Save checkpoint
 torch.save(
 	model.state_dict(),
-	'checkpoints/checkpoint4.pt'
+	'checkpoints/checkpoint5.pt'
 )
 
 # Simple token strategy training code
