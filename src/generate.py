@@ -22,7 +22,7 @@ vocab_size = tokenizer.vocab_size
 # epochs = 10
 
 context_length = 64
-batch_size = 32
+batch_size = 2048
 d_model = 64
 learning_rate = 3e-4
 n_heads = 4
@@ -41,7 +41,7 @@ model.load_state_dict(
 	# torch.load('checkpoints/checkpoint1.pt')
 	# torch.load('checkpoints/checkpoint2.pt')
 	# torch.load('checkpoints/checkpoint_temp_data2.pt')
-	# torch.load('checkpoints/checkpoint3.pt')
+	torch.load('checkpoints/checkpoint3.pt')
 )
 
 model.eval()

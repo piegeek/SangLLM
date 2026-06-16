@@ -12,7 +12,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # Hyperparameters
 context_length = 64
-batch_size = 32
+batch_size = 2048
 d_model = 64
 learning_rate = 3e-4
 n_heads = 4
@@ -30,7 +30,6 @@ loader = DataLoader(
 	batch_size=batch_size,
 	shuffle=True
 )
-
 
 # Tokenizer
 # For full GPT params support
