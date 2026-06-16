@@ -11,6 +11,12 @@ tokenizer.pad_token = tokenizer.eos_token
 
 model = GPT2LMHeadModel.from_pretrained('gpt2')
 
+def format_example(example):
+	return (
+		f"Tweet: {example['text']}\n"
+		f"Sentiment: {example['label_text']}"
+	)
+
 # Tokenize training examples
 def tokenize(example):
 	text = format_example(example)
@@ -25,12 +31,6 @@ def tokenize(example):
 	# (mlm=False) builds labels from the *padded* input_ids and masks pad
 	# positions with -100. Pre-adding ragged labels breaks collation.
 	return enc
-
-def format_example(example):
-	return (
-		f"Tweet: {example['text']}\n"
-		f"Sentiment: {example['label_text']}"
-	)
 
 tokenized = dataset.map(tokenize)
 

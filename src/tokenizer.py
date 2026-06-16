@@ -17,6 +17,7 @@ class GPTTokenizer:
 	def decode(self, tokens):
 		return self.enc.decode(tokens)
 
+# Usually used in vocab_size (train.py), encode, decode (generate.py)
 class BPETokenizer:
 	def __init__(self,path='tokenizer.json'):
 		self.tokenizer = Tokenizer.from_file(path)
