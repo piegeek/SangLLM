@@ -3,3 +3,7 @@ venv/*
 
 # pycache
 */__pycache__/*
+
+# gpt2_sentiment
+*/gpt2_sentiment/*
+gpt2_sentiment/*

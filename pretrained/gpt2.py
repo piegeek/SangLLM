@@ -1,3 +1,5 @@
+# Load parameters from gpt2 and verify it works correctly
+
 from transformers import GPT2LMHeadModel
 from transformers import GPT2Tokenizer
 

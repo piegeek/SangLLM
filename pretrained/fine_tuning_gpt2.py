@@ -21,9 +21,9 @@ def tokenize(example):
 		max_length=128
 	)
 
-	# Create lables
-	enc['labels'] = enc['input_ids'].copy()
-
+	# Note: do NOT set enc['labels'] here. DataCollatorForLanguageModeling
+	# (mlm=False) builds labels from the *padded* input_ids and masks pad
+	# positions with -100. Pre-adding ragged labels breaks collation.
 	return enc
 
 def format_example(example):

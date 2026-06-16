@@ -1,6 +1,11 @@
-torch
-transformers
-datasets
-tokenizers
-tiktoken
-numpy<2
+# NVIDIA B200 (Blackwell, sm_100) requires CUDA 12.8 wheels + torch >= 2.7.
+# This index serves the cu128 build that contains Blackwell kernels.
+--extra-index-url https://download.pytorch.org/whl/cu128
+
+torch>=2.7            # Blackwell support starts here; resolves to latest cu128 (2.11.x)
+transformers>=4.46
+datasets>=3.0
+tokenizers>=0.20
+accelerate>=0.26      # required by transformers Trainer / TrainingArguments
+tiktoken>=0.7
+numpy>=1.26           # numpy 2.x is fine with this stack
