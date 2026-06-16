@@ -11,12 +11,12 @@ from src.model import AttentionLM
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # Hyperparameters
-context_length = 64
-batch_size = 2048
-d_model = 64
+context_length = 256
+batch_size = 64
+d_model = 384
 learning_rate = 3e-4
-n_heads = 4
-n_layers = 4
+n_heads = 6
+n_layers = 6
 epochs = 10
 
 # Dataset
@@ -81,7 +81,7 @@ for i in range(epochs):
 # Save checkpoint
 torch.save(
 	model.state_dict(),
-	'checkpoints/checkpoint3.pt'
+	'checkpoints/checkpoint4.pt'
 )
 
 # Simple token strategy training code

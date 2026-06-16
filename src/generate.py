@@ -10,23 +10,12 @@ tokenizer = BPETokenizer()
 vocab_size = tokenizer.vocab_size
 
 # Hyperparameters
-# context_length = 64
-# # batch_size = 32 # 16 for checkpoint2.pt
-# batch_size = 16# 16 for checkpoint2.pt
-# d_model = 64
-# learning_rate = 3e-4
-# # n_heads = 1 # 2 for checkpoint2.pt
-# # n_layers = 1 # 2 for checkpoint2.pt
-# n_heads = 2 # 2 for checkpoint2.pt
-# n_layers = 2 # 2 for checkpoint2.pt
-# epochs = 10
-
-context_length = 64
-batch_size = 2048
-d_model = 64
+context_length = 256
+batch_size = 64
+d_model = 384
 learning_rate = 3e-4
-n_heads = 4
-n_layers = 4
+n_heads = 6
+n_layers = 6
 epochs = 10
 
 model = AttentionLM(
@@ -41,7 +30,8 @@ model.load_state_dict(
 	# torch.load('checkpoints/checkpoint1.pt')
 	# torch.load('checkpoints/checkpoint2.pt')
 	# torch.load('checkpoints/checkpoint_temp_data2.pt')
-	torch.load('checkpoints/checkpoint3.pt')
+	# torch.load('checkpoints/checkpoint3.pt')
+	torch.load('checkpoints/checkpoint4.pt')
 )
 
 model.eval()
@@ -87,7 +77,7 @@ tokens = generate(
 	model,
 	start,
 	max_new_tokens=50,
-	temperature=0.3,
+	temperature=0.8,
 	context_length=context_length
 )
 
