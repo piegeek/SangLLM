@@ -10,6 +10,9 @@ from src.model import AttentionLM
 # Device
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
+# Max Steps
+max_steps = 100000
+
 # Hyperparameters
 context_length = 256
 batch_size = 64
@@ -68,6 +71,7 @@ def evaluate(max_batches=20):
 	model.train()
 	return sum(losses) / len(losses)
 
+global_step = 0
 # Training Loop
 for i in range(epochs):
 	for step, (x, y) in enumerate(train_loader):
@@ -89,9 +93,14 @@ for i in range(epochs):
 
 		optimizer.step()
 
-		if step % 100 == 0:
+		if global_step % 100 == 0:
 			val_loss = evaluate()
 			print(f'epoch={i} step={step} train_loss={loss.item():.4f}, val_loss={val_loss:.4f}')
+
+		global_step += 1
+
+		if global_step >= max_steps:
+			break
 
 # Save checkpoint
 torch.save(

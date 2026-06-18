@@ -65,7 +65,7 @@ def generate(model, idx, max_new_tokens, temperature, context_length):
 	return idx
 
 # prompt = 'hello'
-prompt = 'Hi my name is Sang Yeop'
+prompt = 'Hi my name is John'
 
 start_tokens = tokenizer.encode(prompt)
 
@@ -78,7 +78,7 @@ tokens = generate(
 	model,
 	start,
 	max_new_tokens=50,
-	temperature=0.8,
+	temperature=0.3,
 	context_length=context_length
 )
 
