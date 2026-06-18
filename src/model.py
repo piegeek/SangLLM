@@ -44,8 +44,11 @@ class BigramLM(nn.Module):
 class AttentionLM(nn.Module):
 	def __init__(self, vocab_size, d_model, context_length=8, num_heads=4, n_layers=2):
 		super().__init__()
-
+		
+		# nn.Embedding is a lookup table
+		# Every possible token -> a d_model vector
 		self.token_embedding = nn.Embedding(vocab_size, d_model)
+		# Every possible position -> a d_model vector
 		self.position_embedding = nn.Embedding(context_length, d_model)
 
 		# Blocks
@@ -63,10 +66,13 @@ class AttentionLM(nn.Module):
 		)
 
 	def forward(self, idx):
+		# B, T are just the shape of the tensor the tokenID is the item of the tensor
 		B, T = idx.shape
 
+		# (B, T, d_model)
 		tok_emb = self.token_embedding(idx)
 
+		# (   T, d_model) -> (1, T, d_model) -> added to every batch
 		pos_emb = self.position_embedding(
 			torch.arange(T, device=idx.device)
 		)
