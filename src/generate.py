@@ -5,6 +5,7 @@ from src.dataset import CharDataset
 from src.model import TinyLM, AttentionLM
 from src.tokenizer import BPETokenizer
 
+# Tokenizer for vocab_size, encode, decode
 tokenizer = BPETokenizer()
 
 vocab_size = tokenizer.vocab_size

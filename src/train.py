@@ -22,21 +22,13 @@ n_heads = 6
 n_layers = 6
 epochs = 10
 
-# Datasets
-# train_ds = TextDataset('data/data.txt', context_length, split='train')
-# val_ds = TextDataset('data/data.txt', context_length, split='val')
-
 train_ds = BinDataset('data/train.bin', context_length)
 val_ds = BinDataset('data/val.bin', context_length)
 
 train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
 val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
 
-# Tokenizer
-# For full GPT params support
-# tokenizer = GPTTokenizer()
-
-# For smaller vocab_size support
+# For smaller vocab_size support; We need tokenizer to get vocab size and in generate.py to encode, decode
 tokenizer = BPETokenizer()
 
 # Model Define (B, T, C(either vocab_size or d_model)), n_heads, n_layers
@@ -107,29 +99,3 @@ torch.save(
 	model.state_dict(),
 	'checkpoints/checkpoint5.pt'
 )
-
-# Simple token strategy training code
-# # Batch size: # of training examples, Context length = # of tokens for each example
-# # Loads in batches
-# # x, y has dimension (B x T)
-# for x, y in loader:
-# 	print(x, y)
-
-# 	# Outputs (B, T, vocab_size)
-# 	logits = model(x)
-
-# 	# Training loss vs Validation loss
-# 	loss = F.cross_entropy(
-# 		logits.view(-1, vocab_size),
-# 		y.view(-1)
-# 	)
-
-# 	optimizer.zero_grad()
-
-# 	loss.backward()
-
-# 	optimizer.step()
-
-# 	print(loss)
-
-# torch.save(model.state_dict(), 'model.pt')
