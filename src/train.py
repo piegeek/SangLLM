@@ -1,4 +1,5 @@
 import os
+import math
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
@@ -21,6 +22,11 @@ learning_rate = 3e-4
 n_heads = 6
 n_layers = 6
 epochs = 10
+
+# --- LR schedule settings (warmup + cosine decay) ---
+warmup_steps = 1000
+min_lr = learning_rate * 0.1
+grad_clip = 1.0
 
 train_ds = BinDataset('data/train.bin', context_length)
 val_ds = BinDataset('data/val.bin', context_length)
@@ -47,6 +53,21 @@ optimizer = torch.optim.AdamW(
 	lr=learning_rate
 )
 
+# --- 1 + 2: learning-rate warmup, then cosine decay ---
+def get_lr(step):
+	if step < warmup_steps:
+		return learning_rate * (step + 1) / warmup_steps
+
+	if step >= max_steps:
+		return min_lr
+
+	# Between warmup_steps and max_steps
+	# Cosine decay
+	progress = (step - warmup_steps) / (max_steps - warmup_steps)
+	coeff = 0.5 * (1.0 + math.cos(math.pi * progress))
+	
+	return min_lr + coeff * (learning_rate - min_lr)
+
 # Evaluate val_dataset
 @torch.no_grad()
 def evaluate(max_batches=20):
@@ -67,6 +88,10 @@ global_step = 0
 # Training Loop
 for i in range(epochs):
 	for step, (x, y) in enumerate(train_loader):
+		# Set this step's learning rate (warmup + cosine) on the optimizer
+		lr = get_lr(global_step)
+		for param_group in optimizer.param_groups:
+			param_group['lr'] = lr
 
 		x, y = x.to(device), y.to(device)
 
@@ -82,17 +107,23 @@ for i in range(epochs):
 		optimizer.zero_grad()
 
 		loss.backward()
+		
+		# --- 3: gradient clipping (cap the global grad norm before stepping) ---
+		torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
 
 		optimizer.step()
 
 		if global_step % 100 == 0:
 			val_loss = evaluate()
-			print(f'epoch={i} step={step} train_loss={loss.item():.4f}, val_loss={val_loss:.4f}')
+			print(f'epoch={i} step={global_step} lr={lr:.2e} train_loss={loss.item():.4f}, val_loss={val_loss:.4f}')
 
 		global_step += 1
 
 		if global_step >= max_steps:
 			break
+	
+	if global_step >= max_steps:
+		break
 
 # Save checkpoint
 torch.save(
