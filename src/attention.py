@@ -33,6 +33,7 @@ class Head(nn.Module):
 			)
 		)
 
+	# (B, T, d_model) -> (B, T, head_size)
 	def forward(self, x):
 		q = self.query(x)
 		k = self.key(x)
@@ -57,7 +58,8 @@ class Head(nn.Module):
 			dim=-1
 		)
 
-		# Weighted sum of values (B, T, T) * (B, T, 16)
+		# Weighted sum of values (B, T, T) * (B, T, head_size) -> (B, T, head_size)
+		# weights == W_v
 		out = weights @ v
 
 		return out
