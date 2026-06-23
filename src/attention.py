@@ -35,13 +35,16 @@ class Head(nn.Module):
 
 	# (B, T, d_model) -> (B, T, head_size)
 	def forward(self, x):
+		# query, key, value are trainable weight matrices
+		# (B, T, d_model) -> (B, T, head_size)
 		q = self.query(x)
 		k = self.key(x)
 		v = self.value(x)
 
+		# B, T, d_model 
 		B, T, C = x.shape
 
-		# (B, T, 16) * (B, 16 ,T) -> (B, T, T) <---- Attention matrix
+		# (B, T, head_size) * (B, head_size, T) -> (B, T, T) <---- Attention matrix
 		weights = q @ k.transpose(-2, -1)
 
 		# Scaling
