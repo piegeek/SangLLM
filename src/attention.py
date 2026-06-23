@@ -63,6 +63,8 @@ class Head(nn.Module):
 
 		# Weighted sum of values (B, T, T) * (B, T, head_size) -> (B, T, head_size)
 		# weights == W_v
+		# Q. returns a tensor of shape (B, T, head_size), but if x is shape (B, T, d_model) how does this output get added to x?
+		# A. See comment on MultiHeadAttention.forward
 		out = weights @ v
 
 		return out
@@ -85,11 +87,11 @@ class MultiHeadAttention(nn.Module):
 
 	def forward(self, x):
 		out = torch.cat(
-			[h(x) for h in self.heads],
-			dim=-1
+			[h(x) for h in self.heads], # num_heads × (B,T,head_size)
+			dim=-1						#   -> (B, T, num_heads*head_size) = (B, T, d_model)
 		)
 
-		out = self.proj(out)
+		out = self.proj(out)			# (B, T, d_model) -> (B, T, d_model)
 		
 		# Transformers almost always use dropout.
 		out = self.dropout(out)
